@@ -6,10 +6,13 @@ import express, {
 import { logger } from "./middleware/logger";
 import { globlaError } from "./middleware/globalErrorHandler";
 import authRoutes from "./api/routes/auth.route";
+import cookieParser from "cookie-parser";
 const app: Application = express();
 
 app.use(logger);
 app.use(express.json());
+app.use(cookieParser());
+
 app.use("/auth", authRoutes);
 
 app.get("/", async (req: Request, res: Response) => {

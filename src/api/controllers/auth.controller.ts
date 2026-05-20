@@ -33,6 +33,12 @@ export const login = async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken } = signToken(user as User);
 
+  res.cookie("refreshToken", refreshToken, {
+    sameSite: "lax",
+    httpOnly: true,
+    secure: false,
+  });
+
   const result = {
     user,
     accessToken,
