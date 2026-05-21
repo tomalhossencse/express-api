@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { login, refresh, signup } from "../controllers/auth.controller";
-import { auth } from "../../utils/auth";
+import { auth, authorizeRole } from "../../utils/auth";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.put("/update/:id", () => {});
 
 router.delete("/delete/:id", () => {});
 
-router.get("/test", auth, (req, res) => {
+router.get("/test", auth, authorizeRole("super_admin", "admin"), (req, res) => {
   res.send("this is super sensative data");
 });
 
