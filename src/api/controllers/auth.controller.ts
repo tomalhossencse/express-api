@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import authService from "../services/auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import { signToken, verifyToken } from "../../utils/jwt";
-import type { User } from "../../types";
 
 export const signup = async (req: Request, res: Response) => {
   const user = await authService.createUser(req.body);
@@ -34,9 +33,9 @@ export const login = async (req: Request, res: Response) => {
   const { accessToken, refreshToken } = signToken(user);
 
   res.cookie("refreshToken", refreshToken, {
-    sameSite: "lax",
-    httpOnly: true,
     secure: false,
+    httpOnly: true,
+    sameSite: "lax",
   });
 
   const result = {
@@ -60,6 +59,7 @@ export const refresh = async (req: Request, res: Response) => {
       res,
       {
         message: "refresh token not found",
+        error: true,
       },
       401,
     );
@@ -111,4 +111,71 @@ export const refresh = async (req: Request, res: Response) => {
       accessToken,
     },
   });
+};
+
+export const logout = async (req: Request, res: Response) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    return sendResponse(
+      res,
+      {
+        message: "No active session found",
+        error: true,
+      },
+      400,
+    );
+  }
+
+  res.clearCookie("refreshToken", {
+    secure: false,
+    httpOnly: true,
+    sameSite: "lax",
+  });
+
+  sendResponse(
+    res,
+    {
+      message: "Logout Successfully",
+    },
+    200,
+  );
+};
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+  const accessToken = req.headers.authorization as string;
+
+  if (!accessToken) {
+    return sendResponse(
+      res,
+      {
+        message: "unauthorized access",
+        error: true,
+      },
+      401,
+    );
+  }
+  const userId = verifyToken(accessToken, "access")?.id;
+
+  const user = await authService.getUserById(userId);
+
+  if (!user) {
+    return sendResponse(
+      res,
+      {
+        message: "User not found",
+        error: true,
+      },
+      404,
+    );
+  }
+
+  sendResponse(
+    res,
+    {
+      message: "User fetched Succesfuly",
+      data: user,
+    },
+    200,
+  );
 };

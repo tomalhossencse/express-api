@@ -12,6 +12,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       res,
       {
         message: "token not found",
+        error: true,
       },
       401,
     );
