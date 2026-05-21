@@ -5,6 +5,7 @@ import {
   logout,
   refresh,
   signup,
+  updateUser,
 } from "../controllers/auth.controller";
 import { auth, authorizeRole } from "../../utils/auth";
 
@@ -19,7 +20,7 @@ router.get("/refresh", refresh);
 
 router.get("/me", getCurrentUser);
 
-// router.put("/update/:id", () => {});
+router.put("/update/:id", auth, updateUser);
 
 // router.delete("/delete/:id", () => {});
 

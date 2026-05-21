@@ -20,8 +20,8 @@ export const initDB = async () => {
   await sql`
     CREATE TABLE  IF NOT EXISTS orders (
         id SERIAL PRIMARY KEY,
-       customer_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        quantity INT NOT NULL CHECK(quantity > 0),
+       customer_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        quantity INTEGER NOT NULL CHECK(quantity > 0),
         food TEXT NOT NULL,
         price NUMERIC(10, 2) NOT NULL,
 

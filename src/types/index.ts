@@ -36,3 +36,10 @@ export type Order = {
   created_at: Date;
   update_at: Date;
 };
+
+export type NewOrder = {
+  customer_id: number;
+  quantity: number;
+  food: string;
+  price: number;
+};

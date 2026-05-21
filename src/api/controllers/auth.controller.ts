@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import authService from "../services/auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import { signToken, verifyToken } from "../../utils/jwt";
+import type { RUser } from "../../types";
 
 export const signup = async (req: Request, res: Response) => {
   const user = await authService.createUser(req.body);
@@ -175,6 +176,47 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     {
       message: "User fetched Succesfuly",
       data: user,
+    },
+    200,
+  );
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return sendResponse(
+      res,
+      {
+        message: "User not found",
+        error: true,
+      },
+      404,
+    );
+  }
+
+  const { name, email, age, password } = req.body;
+
+  const updated = await authService.updateUserIntoDb(userId, {
+    name,
+    email,
+    age,
+    password,
+  });
+
+  if (!updated) {
+    return sendResponse(
+      res,
+      { message: "Failed to update user", error: true },
+      400,
+    );
+  }
+
+  sendResponse(
+    res,
+    {
+      message: "User Updated Succesfuly",
+      data: updated,
     },
     200,
   );
