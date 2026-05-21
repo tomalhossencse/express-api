@@ -1,8 +1,8 @@
 import config from "../config";
-import type { User } from "../types";
-import jwt from "jsonwebtoken";
+import type { RUser, User } from "../types";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
-export const signToken = (payload: User) => {
+export const signToken = (payload: JwtPayload) => {
   // access token => data access
   //refresh token => generate access token again
 
@@ -14,4 +14,14 @@ export const signToken = (payload: User) => {
   });
 
   return { accessToken, refreshToken };
+};
+
+export const verifyToken = (token: string, type: "access" | "refresh") => {
+  const secrect =
+    type === "access"
+      ? config.access_token_secret
+      : config.refresh_token_secret;
+
+  const decode = jwt.verify(token, secrect);
+  return decode as RUser & { id: number };
 };

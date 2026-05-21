@@ -18,6 +18,15 @@ export type RUser = Omit<
   "id" | "created_at" | "update_at" | "password_hash"
 >;
 
+// export type jwtPayload = {
+//   id: number;
+//   name: string;
+//   email: string;
+
+//   age: number;
+//   role: Role;
+// };
+
 export type Order = {
   id: number;
   customer_id: number;
