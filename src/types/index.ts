@@ -10,12 +10,12 @@ export type User = {
   age: number;
   role: Role;
   created_at: Date;
-  update_at: Date;
+  updated_at: Date;
 };
 
 export type RUser = Omit<
   User,
-  "id" | "created_at" | "update_at" | "password_hash"
+  "id" | "created_at" | "updated_at" | "password_hash"
 >;
 
 // export type jwtPayload = {

@@ -26,6 +26,11 @@ class OrderService {
     `;
     return orders;
   }
+
+  async deleteAllOrders() {
+    const res = await sql`DELETE FROM orders RETURNING *`;
+    return res;
+  }
 }
 
 export default new OrderService();
